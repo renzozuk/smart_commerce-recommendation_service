@@ -5,6 +5,9 @@ import dev.renzozukeram.recommendation.feignClients.InventoryAccessService;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Service
 public class GeminiChatService implements ChatService {
 
@@ -17,7 +20,7 @@ public class GeminiChatService implements ChatService {
     }
 
     @Override
-    public String getAnswer(PromptRequest promptRequest) {
+    public List<String> getAnswer(PromptRequest promptRequest) {
 
         String prompt = "The user date of birth is " + promptRequest.userDateOfBirth() + "." +
                 "The user is " + promptRequest.userGender() + "." +
@@ -26,8 +29,10 @@ public class GeminiChatService implements ChatService {
                 "The products returned by the user are: " + promptRequest.userReturns() + "." +
                 "The available products are: " + inventoryAccessService.getAllProductsAsString() + ".";
 
-        return chatClient.prompt()
+        String response = chatClient.prompt()
                 .user(user -> user.text(prompt))
                 .call().content();
+
+        return Arrays.stream(response.split(";")).toList();
     }
 }

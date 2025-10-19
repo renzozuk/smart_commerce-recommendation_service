@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/chat")
 public class PromptController {
@@ -15,7 +17,7 @@ public class PromptController {
 
 
     @GetMapping
-    public ResponseEntity<String> prompt(@RequestBody PromptRequest promptRequest) {
+    public ResponseEntity<List<String>> prompt(@RequestBody PromptRequest promptRequest) {
         return ResponseEntity.ok(chatService.getAnswer(promptRequest));
     }
 }
