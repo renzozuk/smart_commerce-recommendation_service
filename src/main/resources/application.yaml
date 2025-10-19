@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: recommendation
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
+  config:
+    import: optional:configserver:http://localhost:8888
+  profiles:
+    active: dev
+  ai:
+    chat:
+      observations:
+        log-prompt: false
+    openai:
+      api-key: ${API_KEY}
+      base-url: https://generativelanguage.googleapis.com/v1beta/openai
+      chat:
+        completions-path: /chat/completions
+        options:
+          model: gemini-2.5-flash
+          temperature: 0.0
+      embedding:
+        api-key: ${API_KEY}
+        base-url: https://generativelanguage.googleapis.com/v1beta/openai
+        options:
+          model: text-embedding-004
+          dimensions: 768
+        embeddings-path: /embeddings
+    vectorstore:
+      simple:
+        store:
+          path: ./vectorstore.json
