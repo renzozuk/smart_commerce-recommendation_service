@@ -14,7 +14,7 @@ public class PromptController {
     private ChatService chatService;
 
 
-    @PostMapping
+    @GetMapping
     public ResponseEntity<String> prompt(@RequestBody PromptRequest promptRequest) {
         return ResponseEntity.ok(chatService.getAnswer(promptRequest));
     }
