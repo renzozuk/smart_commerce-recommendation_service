@@ -1,9 +1,7 @@
 package dev.renzozukeram.recommendation.services;
 
-import dev.renzozukeram.recommendation.dto.PromptRequest;
-
 import java.util.List;
 
 public interface ChatService {
-    List<String> getAnswer(PromptRequest promptRequest);
+    List<String> getAnswer(String userDateOfBirth, String userGender, String userViews, String userPurchases, String userReturns, String userProducts);
 }
