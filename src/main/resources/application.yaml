@@ -19,7 +19,7 @@ spring:
       chat:
         completions-path: /chat/completions
         options:
-          model: gemini-2.5-flash
+          model: gemini-2.0-flash
           temperature: 0.0
       embedding:
         api-key: ${API_KEY}
