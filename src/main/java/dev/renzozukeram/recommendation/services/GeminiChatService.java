@@ -1,5 +1,6 @@
 package dev.renzozukeram.recommendation.services;
 
+import dev.renzozukeram.recommendation.util.UuidFilter;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Service;
 
@@ -16,19 +17,21 @@ public class GeminiChatService implements ChatService {
     }
 
     @Override
-    public List<String> getAnswer(String userDateOfBirth, String userGender, String userViews, String userPurchases, String userReturns, String userProducts) {
+    public List<String> getAnswer(Object userDateOfBirth, Object userGender, Object userViews, Object userPurchases, Object userReturns, Object products) {
 
-        String prompt = "The user date of birth is " + userDateOfBirth + "." +
-                "The user is " + userGender + "." +
-                "The products viewed by the user are: " + userViews + "." +
-                "The products purchased by the user are: " + userPurchases + "." +
-                "The products returned by the user are: " + userReturns + "." +
-                "The available products are: " + userProducts + ".";
+        String prompt = "The user date of birth is " + userDateOfBirth + ". " +
+                "The user is " + userGender + ". " +
+                "The products viewed by the user are: " + userViews + ". " +
+                "The products purchased by the user are: " + userPurchases + ". " +
+                "The products returned by the user are: " + userReturns + ". " +
+                "The available products are: " + products + ".";
+
+        System.out.println(prompt);
 
         String response = chatClient.prompt()
                 .user(user -> user.text(prompt))
                 .call().content();
 
-        return Arrays.stream(response.split(";")).toList();
+        return Arrays.stream(response.split(";")).map(UuidFilter::extractUuid).toList();
     }
 }
