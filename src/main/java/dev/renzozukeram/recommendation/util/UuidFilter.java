@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 public class UuidFilter {
 
-    private static final Pattern UUID_PATTERN =
+    public static final Pattern UUID_PATTERN =
             Pattern.compile("([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})");
 
     public static String extractUuid(String llmOutput) {

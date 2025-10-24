@@ -1,7 +1,7 @@
 package dev.renzozukeram.recommendation.services;
 
-import java.util.List;
+import reactor.core.publisher.Flux;
 
 public interface ChatService {
-    List<String> getAnswer(Object userDateOfBirth, Object userGender, Object userViews, Object userPurchases, Object userReturns, Object products);
+    Flux<String> getAnswer(Object userDateOfBirth, Object userGender, Object userViews, Object userPurchases, Object userReturns, Object products);
 }
