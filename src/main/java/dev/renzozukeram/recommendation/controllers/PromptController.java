@@ -17,6 +17,6 @@ public class PromptController {
 
     @PostMapping
     public ResponseEntity<List<String>> prompt(@RequestBody Map<String, Object> requestBody) {
-        return ResponseEntity.ok(chatService.getAnswer(requestBody.get("userDateOfBirth"), requestBody.get("userGender"), requestBody.get("userViews"), requestBody.get("userPurchases"), requestBody.get("userReturns"), requestBody.get("products")));
+        return ResponseEntity.ok(chatService.getAnswer(requestBody.get("userInfo"), requestBody.get("userViews"), requestBody.get("userPurchases"), requestBody.get("userReturns"), requestBody.get("products")));
     }
 }
