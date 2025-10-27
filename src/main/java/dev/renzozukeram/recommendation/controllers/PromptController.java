@@ -17,6 +17,6 @@ public class PromptController {
 
     @PostMapping
     public Flux<UUID> prompt(@RequestBody Map<String, Object> requestBody) {
-        return chatService.getAnswer(requestBody.get("userDateOfBirth"), requestBody.get("userGender"), requestBody.get("userViews"), requestBody.get("userPurchases"), requestBody.get("userReturns"), requestBody.get("products"));
+        return chatService.getAnswer(requestBody.get("userInfo"), requestBody.get("userViews"), requestBody.get("userPurchases"), requestBody.get("userReturns"), requestBody.get("products"));
     }
 }

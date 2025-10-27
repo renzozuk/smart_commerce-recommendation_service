@@ -22,22 +22,19 @@ public class GeminiChatService implements ChatService {
 
     @Override
     public Flux<UUID> getAnswer(
-            Object userDateOfBirth,
-            Object userGender,
+            Object userInfo,
             Object userViews,
             Object userPurchases,
             Object userReturns,
             Object products) {
 
         String prompt =
-                "The user date of birth is " + userDateOfBirth + ". " +
-                        "The user is " + userGender + ". " +
+                "The user info are: " + userInfo + ". " +
                         "The products viewed by the user are: " + userViews + ". " +
                         "The products purchased by the user are: " + userPurchases + ". " +
                         "The products returned by the user are: " + userReturns + ". " +
                         "The available products are: " + products + "." +
 
-                        // Instrução Estrita
                         "\n\nSTRICT INSTRUCTION:\n" +
                         "1. ANALYZE THE PROVIDED DATA AND GENERATE A LIST OF RECOMMENDED PRODUCT UUIDS.\n" +
                         "2. YOUR RESPONSE MUST CONTAIN ONLY THE UUIDS, SEPARATED BY A SEMICOLON (';').\n" +
@@ -47,7 +44,7 @@ public class GeminiChatService implements ChatService {
         Flux<String> responseFlux = chatClient.prompt()
                 .user(user -> user.text(prompt))
                 .stream().content();
-        
+
         return responseFlux
                 .collect(Collectors.joining())
                 .flatMapMany(fullResponse -> {
