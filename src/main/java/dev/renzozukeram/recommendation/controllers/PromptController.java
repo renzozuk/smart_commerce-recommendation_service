@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/chat")
@@ -15,7 +16,7 @@ public class PromptController {
     private ChatService chatService;
 
     @PostMapping
-    public Flux<String> prompt(@RequestBody Map<String, Object> requestBody) {
+    public Flux<UUID> prompt(@RequestBody Map<String, Object> requestBody) {
         return chatService.getAnswer(requestBody.get("userDateOfBirth"), requestBody.get("userGender"), requestBody.get("userViews"), requestBody.get("userPurchases"), requestBody.get("userReturns"), requestBody.get("products"));
     }
 }

@@ -7,7 +7,9 @@ import reactor.core.publisher.Flux;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.regex.Matcher;
+import java.util.stream.Collectors;
 
 @Service
 public class GeminiChatService implements ChatService {
@@ -19,7 +21,7 @@ public class GeminiChatService implements ChatService {
     }
 
     @Override
-    public Flux<String> getAnswer(
+    public Flux<UUID> getAnswer(
             Object userDateOfBirth,
             Object userGender,
             Object userViews,
@@ -27,29 +29,41 @@ public class GeminiChatService implements ChatService {
             Object userReturns,
             Object products) {
 
-        String prompt = "The user date of birth is " + userDateOfBirth + ". " +
-                "The user is " + userGender + ". " +
-                "The products viewed by the user are: " + userViews + ". " +
-                "The products purchased by the user are: " + userPurchases + ". " +
-                "The products returned by the user are: " + userReturns + ". " +
-                "The available products are: " + products + "." +
-                " IMPORTANT: Respond ONLY with a list of recommended product UUIDs, separated by a semicolon (';').";
+        String prompt =
+                "The user date of birth is " + userDateOfBirth + ". " +
+                        "The user is " + userGender + ". " +
+                        "The products viewed by the user are: " + userViews + ". " +
+                        "The products purchased by the user are: " + userPurchases + ". " +
+                        "The products returned by the user are: " + userReturns + ". " +
+                        "The available products are: " + products + "." +
+
+                        // Instrução Estrita
+                        "\n\nSTRICT INSTRUCTION:\n" +
+                        "1. ANALYZE THE PROVIDED DATA AND GENERATE A LIST OF RECOMMENDED PRODUCT UUIDS.\n" +
+                        "2. YOUR RESPONSE MUST CONTAIN ONLY THE UUIDS, SEPARATED BY A SEMICOLON (';').\n" +
+                        "3. DO NOT INCLUDE ANY CONVERSATIONAL TEXT, EXPLANATION, OR ANY OTHER CHARACTER BEFORE OR AFTER THE LIST. " +
+                        "4. EXAMPLE FORMAT: 12345678-90ab-cdef-1234-567890abcdef;a1b2c3d4-e5f6-7890-1234-567890abcdef";
 
         Flux<String> responseFlux = chatClient.prompt()
                 .user(user -> user.text(prompt))
                 .stream().content();
-
+        
         return responseFlux
-                .flatMapIterable(chunk -> {
+                .collect(Collectors.joining())
+                .flatMapMany(fullResponse -> {
 
-                    List<String> uuids = new ArrayList<>();
-                    Matcher matcher = UuidFilter.UUID_PATTERN.matcher(chunk);
+                    List<UUID> uuids = new ArrayList<>();
+                    Matcher matcher = UuidFilter.UUID_PATTERN.matcher(fullResponse);
 
                     while (matcher.find()) {
-                        uuids.add(matcher.group());
+                        try {
+                            uuids.add(UUID.fromString(matcher.group()));
+                        } catch (IllegalArgumentException e) {
+                            System.err.println("UUID inválido encontrado: " + matcher.group());
+                        }
                     }
 
-                    return uuids;
+                    return Flux.fromIterable(uuids);
                 })
                 .distinct();
     }
