@@ -31,7 +31,7 @@ public class GeminiChatService implements ChatService {
                         "2. YOUR RESPONSE MUST CONTAIN ONLY THE UUIDS, SEPARATED BY A SEMICOLON (';').\n" +
                         "3. DO NOT INCLUDE ANY CONVERSATIONAL TEXT, EXPLANATION, OR ANY OTHER CHARACTER BEFORE OR AFTER THE LIST. " +
                         "4. EXAMPLE FORMAT: 12345678-90ab-cdef-1234-567890abcdef;a1b2c3d4-e5f6-7890-1234-567890abcdef";
-        
+
         String response = chatClient.prompt()
                 .user(user -> user.text(prompt))
                 .call().content();
