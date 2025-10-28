@@ -1,4 +1,9 @@
 spring:
+  graphql:
+    schema:
+      locations: "classpath:graphql/**/"
+    graphiql:
+      enabled: true
   ai:
     chat:
       observations:

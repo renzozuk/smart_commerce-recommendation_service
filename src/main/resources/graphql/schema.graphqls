@@ -1,0 +1,15 @@
+input PromptInput {
+    userInfo: String
+    userViews: String
+    userPurchases: String
+    userReturns: String
+    products: String
+}
+
+type Mutation {
+    prompt(input: PromptInput!): [String]
+}
+
+type Query {
+    _placeholder: String
+}
